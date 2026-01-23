@@ -65,7 +65,7 @@ export default {
     return {
       activityId: '',
       activityTitle: '春茗主题讲座',
-      backgroundImage: '/images/lecture-bg.jpg',
+      backgroundImage: 'https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
       danmakuContent: '',
       isInputExpanded: false,
       isAnonymous: false,
@@ -232,7 +232,7 @@ export default {
   justify-content: space-between;
   padding: 0 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  z-index: 100;
+  z-index: 150;
 
   .header-title {
     font-size: 18px;
@@ -261,12 +261,14 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
+  z-index: 1;
 }
 
 .background-image {
   flex: 1;
   position: relative;
   overflow: hidden;
+  z-index: 1;
 
   img {
     width: 100%;
@@ -285,7 +287,8 @@ export default {
   padding-bottom: calc(12px + env(safe-area-inset-bottom));
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
-  z-index: 100;
+  z-index: 200;
+  transform: translateY(100%);
 
   &.expanded {
     transform: translateY(0);
