@@ -29,16 +29,18 @@ export function saveLocalDanmaku(activityId, danmaku) {
     // 只保留最近 1000 条
     const recentList = list.slice(-1000)
     localStorage.setItem(`${STORAGE_KEY}_${activityId}`, JSON.stringify(recentList))
-    
+
     // 触发自定义事件，通知其他页面
-    window.dispatchEvent(new CustomEvent(EVENT_KEY, {
-      detail: {
-        activityId,
-        danmaku: newDanmaku,
-        type: 'new_danmaku'
-      }
-    }))
-    
+    window.dispatchEvent(
+      new CustomEvent(EVENT_KEY, {
+        detail: {
+          activityId,
+          danmaku: newDanmaku,
+          type: 'new_danmaku'
+        }
+      })
+    )
+
     return newDanmaku
   } catch (error) {
     console.error('保存本地弹幕失败:', error)

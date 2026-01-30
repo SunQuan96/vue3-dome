@@ -13,7 +13,7 @@ const service = axios.create({
 
 // 请求拦截器
 service.interceptors.request.use(
-  (config) => {
+  config => {
     const userStore = useUserStore()
     // 添加 token
     if (userStore.token) {
@@ -21,7 +21,7 @@ service.interceptors.request.use(
     }
     return config
   },
-  (error) => {
+  error => {
     console.error('请求错误:', error)
     return Promise.reject(error)
   }
@@ -29,7 +29,7 @@ service.interceptors.request.use(
 
 // 响应拦截器
 service.interceptors.response.use(
-  (response) => {
+  response => {
     const res = response.data
 
     // 如果返回的状态码不是 200，则视为错误
@@ -40,7 +40,7 @@ service.interceptors.response.use(
 
     return res
   },
-  (error) => {
+  error => {
     console.error('响应错误:', error)
 
     if (error.response) {

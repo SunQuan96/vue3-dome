@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 示例 API
 export const api = {
   // 获取用户信息
-  getUserInfo: (params) => {
+  getUserInfo: params => {
     return request({
       url: '/user/info',
       method: 'get',
@@ -12,7 +12,7 @@ export const api = {
   },
 
   // 登录
-  login: (data) => {
+  login: data => {
     return request({
       url: '/user/login',
       method: 'post',

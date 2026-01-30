@@ -11,15 +11,15 @@ export const useDanmakuStore = defineStore('danmaku', {
   }),
   getters: {
     // 获取显示的弹幕（最近20条）
-    displayDanmaku: (state) => {
+    displayDanmaku: state => {
       return state.danmakuList.slice(-20)
     },
     // 获取 AI 弹幕
-    aiDanmaku: (state) => {
+    aiDanmaku: state => {
       return state.danmakuList.filter(item => item.type === 'ai')
     },
     // 获取真人弹幕
-    realDanmaku: (state) => {
+    realDanmaku: state => {
       return state.danmakuList.filter(item => item.type === 'real')
     }
   },
@@ -39,7 +39,7 @@ export const useDanmakuStore = defineStore('danmaku', {
         isHighlighted: danmaku.isHighlighted || false, // 是否被高亮
         isPinned: danmaku.isPinned || false // 是否置顶
       }
-      
+
       // 根据属性设置类型
       if (newDanmaku.isPinned) {
         newDanmaku.type = 'pinned'
@@ -52,9 +52,9 @@ export const useDanmakuStore = defineStore('danmaku', {
       } else {
         newDanmaku.type = 'normal'
       }
-      
+
       this.danmakuList.push(newDanmaku)
-      
+
       // 更新热词
       this.updateHotWords()
     },
@@ -102,8 +102,7 @@ export const useDanmakuStore = defineStore('danmaku', {
     updateHotWords() {
       const allTexts = this.danmakuList.map(item => item.content)
       const newHotWords = countHotWords(allTexts)
-      this.hotWords = mergeHotWords(this.hotWords, newHotWords)
-        .slice(0, 20) // 只保留前20个
+      this.hotWords = mergeHotWords(this.hotWords, newHotWords).slice(0, 20) // 只保留前20个
     },
 
     // 设置活动 ID

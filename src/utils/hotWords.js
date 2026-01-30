@@ -10,7 +10,7 @@ export function extractKeywords(text) {
 
   // 移除标点符号和特殊字符
   const cleaned = text.replace(/[，。！？、；：""''（）【】《》\s]/g, '')
-  
+
   // 简单分词（实际应该使用专业分词库）
   const words = []
   const minLength = 2

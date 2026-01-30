@@ -98,15 +98,11 @@
             v-for="col in type2Columns"
             :key="col.key"
             class="table-header-cell"
-            :class="{ 'sortable': col.sortable, 'active': sortKey === col.key }"
+            :class="{ sortable: col.sortable, active: sortKey === col.key }"
             @click="handleSort(col.key, col.sortable)"
           >
             {{ col.title }}
-            <van-icon
-              v-if="col.sortable"
-              :name="getSortIcon(col.key)"
-              class="sort-icon"
-            />
+            <van-icon v-if="col.sortable" :name="getSortIcon(col.key)" class="sort-icon" />
           </div>
         </div>
         <div class="table-body">
@@ -233,9 +229,7 @@ export default {
 
         const aStr = String(aVal || '')
         const bStr = String(bVal || '')
-        return this.sortOrder === 'asc'
-          ? aStr.localeCompare(bStr)
-          : bStr.localeCompare(aStr)
+        return this.sortOrder === 'asc' ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr)
       })
     }
   },
@@ -355,7 +349,6 @@ export default {
     formatDate(date, format) {
       return formatDateUtil(date, format)
     },
-
 
     // 获取变动样式类
     getChangeClass(change) {

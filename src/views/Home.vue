@@ -10,21 +10,11 @@
       </van-cell-group>
 
       <div class="demo-section">
-        <van-button type="primary" block @click="handleClick">
-          点击测试
-        </van-button>
-        <van-button type="success" block @click="goToAbout">
-          跳转到关于页面
-        </van-button>
-        <van-button type="warning" block @click="goToChannelData">
-          渠道数据页面
-        </van-button>
-        <van-button type="primary" block @click="goToScreen">
-          公屏端（电视展示）
-        </van-button>
-        <van-button type="info" block @click="goToParticipant">
-          参与端（手机扫码）
-        </van-button>
+        <van-button type="primary" block @click="handleClick"> 点击测试 </van-button>
+        <van-button type="success" block @click="goToAbout"> 跳转到关于页面 </van-button>
+        <van-button type="warning" block @click="goToChannelData"> 渠道数据页面 </van-button>
+        <van-button type="primary" block @click="goToScreen"> 公屏端（电视展示） </van-button>
+        <van-button type="info" block @click="goToParticipant"> 参与端（手机扫码） </van-button>
       </div>
 
       <div class="info">

@@ -103,39 +103,58 @@
 
       <!-- 主讲人信息与热词看板轮播 -->
       <div class="carousel-section">
-        <div
-          v-if="showSpeakerInfo"
-          class="carousel-item speaker-carousel"
-          :class="{ active: currentCarouselIndex === 0 }"
-        >
-          <div class="speaker-card-mini">
-            <img :src="speakerInfo.avatar" :alt="speakerInfo.name" class="speaker-avatar-mini" />
-            <div class="speaker-details-mini">
-              <h3 class="speaker-name-mini">{{ speakerInfo.name }}</h3>
-              <p class="speaker-title-mini">{{ speakerInfo.title }}</p>
-            </div>
+        <!-- Swiper Tab 导航 -->
+        <div class="swiper-tabs">
+          <div 
+            v-if="showSpeakerInfo"
+            class="swiper-tab"
+            :class="{ active: activeTab === 0 }"
+            @click="switchTab(0)"
+          >
+            主讲人
+          </div>
+          <div 
+            class="swiper-tab"
+            :class="{ active: activeTab === 1 }"
+            @click="switchTab(1)"
+          >
+            热词词云
           </div>
         </div>
 
-        <div
-          v-if="hotWords.length > 0"
-          class="carousel-item hotwords-carousel"
-          :class="{ active: currentCarouselIndex === 1 }"
-        >
-          <div class="hotwords-board">
-            <div class="hotwords-title">热词看板</div>
-            <div class="hotwords-list">
-              <div
-                v-for="(word, index) in hotWords"
-                :key="index"
-                class="hotword-item"
-                :style="getHotwordStyle(word)"
-              >
-                <span class="hotword-text">{{ word.text }}</span>
-                <span class="hotword-count">{{ word.count }}</span>
+        <!-- Swiper 轮播内容 -->
+        <div class="swiper-container">
+          <Swiper
+            :slides-per-view="1"
+            :space-between="0"
+            :centered-slides="true"
+            :initial-slide="activeTab"
+            @slide-change="onSlideChange"
+            class="swiper-wrapper"
+          >
+            <!-- 主讲人信息 -->
+            <SwiperSlide v-if="showSpeakerInfo">
+              <div class="speaker-carousel">
+                <div class="speaker-card-mini">
+                  <img :src="speakerInfo.avatar" :alt="speakerInfo.name" class="speaker-avatar-mini" />
+                  <div class="speaker-details-mini">
+                    <h3 class="speaker-name-mini">{{ speakerInfo.name }}</h3>
+                    <p class="speaker-title-mini">{{ speakerInfo.title }}</p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            </SwiperSlide>
+
+            <!-- 热词词云 -->
+            <SwiperSlide>
+              <div class="wordcloud-carousel">
+                <div class="wordcloud-board">
+                  <div class="wordcloud-title">热词词云</div>
+                  <WordCloud :min-count="3" :speaker-id="123" />
+                </div>
+              </div>
+            </SwiperSlide>
+          </Swiper>
         </div>
       </div>
     </div>
@@ -144,8 +163,13 @@
 
 <script>
 import { fetchData } from '@/service'
+import WordCloud from '@/components/wordCloud.vue'
 import { useDanmakuStore } from '@/store/danmaku'
 import { getLocalDanmaku, onDanmakuEvent } from '@/utils/danmakuLocal'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
 
 // 简单的二维码生成（使用在线服务）
 function generateQRCode(text) {
@@ -155,6 +179,11 @@ function generateQRCode(text) {
 
 export default {
   name: 'ScreenDisplay',
+  components: {
+    WordCloud,
+    Swiper,
+    SwiperSlide
+  },
   data() {
     return {
       mode: 'before', // 'before' | 'during'
@@ -166,8 +195,7 @@ export default {
         description: '主讲人简介信息',
         avatar: '/images/speaker-default.png'
       },
-      currentCarouselIndex: 0, // 当前轮播索引
-      carouselTimer: null,
+      activeTab: 0, // 当前激活的Tab索引
       showSpeakerInfo: true, // 是否显示主讲人信息
       danmakuTimer: null, // 弹幕更新定时器
       ws: null, // WebSocket 连接
@@ -203,7 +231,8 @@ export default {
     try {
       // 初始化 store
       this.danmakuStore = useDanmakuStore()
-      const activityId = (this.$route && this.$route.query && this.$route.query.activityId) || 'default'
+      const activityId =
+        (this.$route && this.$route.query && this.$route.query.activityId) || 'default'
       this.danmakuStore.setActivityId(activityId)
     } catch (error) {
       console.error('初始化 store 失败:', error)
@@ -231,7 +260,8 @@ export default {
   methods: {
     // 初始化二维码
     initQRCode() {
-      const activityId = (this.$route && this.$route.query && this.$route.query.activityId) || 'default'
+      const activityId =
+        (this.$route && this.$route.query && this.$route.query.activityId) || 'default'
       const participantUrl = `${window.location.origin}/participant?activityId=${activityId}`
       try {
         const qrDataUrl = generateQRCode(participantUrl)
@@ -256,15 +286,16 @@ export default {
 
     // 初始化 WebSocket
     initWebSocket() {
-      const activityId = (this.$route && this.$route.query && this.$route.query.activityId) || 'default'
+      const activityId =
+        (this.$route && this.$route.query && this.$route.query.activityId) || 'default'
       const wsUrl = `ws://localhost:8080/ws/danmaku?activityId=${activityId}`
       try {
         this.ws = new WebSocket(wsUrl)
-        this.ws.onmessage = (event) => {
+        this.ws.onmessage = event => {
           const data = JSON.parse(event.data)
           this.handleWebSocketMessage(data)
         }
-        this.ws.onerror = (error) => {
+        this.ws.onerror = error => {
           console.error('WebSocket 错误:', error)
           // 降级为轮询
           this.startPolling()
@@ -298,8 +329,9 @@ export default {
 
     // 轮询获取数据（降级方案）
     startPolling() {
-      const activityId = (this.$route && this.$route.query && this.$route.query.activityId) || 'default'
-      
+      const activityId =
+        (this.$route && this.$route.query && this.$route.query.activityId) || 'default'
+
       // 先加载本地存储的弹幕
       const localDanmaku = getLocalDanmaku(activityId)
       localDanmaku.forEach(item => {
@@ -307,7 +339,7 @@ export default {
       })
 
       // 监听新弹幕事件
-      const unsubscribe = onDanmakuEvent((event) => {
+      const unsubscribe = onDanmakuEvent(event => {
         if (event.detail.activityId === activityId) {
           this.danmakuStore.addDanmaku(event.detail.danmaku)
         }
@@ -338,7 +370,8 @@ export default {
     // 加载主讲人信息
     async loadSpeakerInfo() {
       try {
-        const activityId = (this.$route && this.$route.query && this.$route.query.activityId) || 'default'
+        const activityId =
+          (this.$route && this.$route.query && this.$route.query.activityId) || 'default'
         const response = await fetchData('/speaker/info', {
           activityId: activityId
         })
@@ -365,7 +398,7 @@ export default {
       }
     },
 
-    // 获取热词样式
+    // 获取热词样式（保留方法，可能在其他地方使用）
     getHotwordStyle(word) {
       const maxCount = Math.max(...this.hotWords.map(w => w.count), 1)
       const fontSize = 16 + (word.count / maxCount) * 20
@@ -405,20 +438,23 @@ export default {
       }
     },
 
-    // 开始轮播
-    startCarousel() {
-      if (this.hotWords.length >= 5) {
-        // 热词量达到5个，一直展示热词看板
-        this.showSpeakerInfo = false
-        this.currentCarouselIndex = 1
-        return
-      }
+    // 切换Tab
+    switchTab(index) {
+      this.activeTab = index
+    },
 
-      this.carouselTimer = setInterval(() => {
-        if (this.showSpeakerInfo && this.hotWords.length > 0) {
-          this.currentCarouselIndex = this.currentCarouselIndex === 0 ? 1 : 0
-        }
-      }, 5000)
+    // Swiper滑动变化
+    onSlideChange(swiper) {
+      this.activeTab = swiper.activeIndex
+    },
+
+    // 开始轮播（兼容旧逻辑）
+    startCarousel() {
+      if (this.hotWords.length >= 3) {
+        // 热词量达到3个，自动切换到热词词云
+        this.showSpeakerInfo = false
+        this.activeTab = 1
+      }
     },
 
     // 开始弹幕更新（弹幕由 store 管理，这里不需要额外更新）
@@ -433,7 +469,7 @@ export default {
           { type: 'real', sender: '用户3', content: '主讲人讲得真好' },
           { type: 'real', sender: '用户4', content: '期待更多这样的活动' }
         ]
-        
+
         testDanmaku.forEach(item => {
           this.danmakuStore.addDanmaku(item)
         })
@@ -453,7 +489,8 @@ export default {
     // 加载语音转写数据
     async loadSpeechTranscription() {
       try {
-        const activityId = (this.$route && this.$route.query && this.$route.query.activityId) || 'default'
+        const activityId =
+          (this.$route && this.$route.query && this.$route.query.activityId) || 'default'
         const response = await fetchData('/speech/transcription', {
           activityId: activityId
         })
@@ -489,21 +526,24 @@ export default {
     startPinnedDanmaku() {
       // 从 store 中获取置顶弹幕
       this.updatePinnedDanmaku()
-      
+
       // 每 3 分钟循环播放一次置顶弹幕
-      this.pinnedTimer = setInterval(() => {
-        this.currentPinnedIndex = (this.currentPinnedIndex + 1) % (this.pinnedDanmaku.length || 1)
-        this.updatePinnedDanmaku()
-      }, 3 * 60 * 1000) // 3分钟
+      this.pinnedTimer = setInterval(
+        () => {
+          this.currentPinnedIndex = (this.currentPinnedIndex + 1) % (this.pinnedDanmaku.length || 1)
+          this.updatePinnedDanmaku()
+        },
+        3 * 60 * 1000
+      ) // 3分钟
     },
 
     // 更新置顶弹幕
     updatePinnedDanmaku() {
       if (!this.danmakuStore) return
-      
+
       // 从所有弹幕中筛选出置顶弹幕
       const allPinned = this.danmakuStore.danmakuList.filter(item => item && item.type === 'pinned')
-      
+
       // 如果有置顶弹幕，显示当前索引的弹幕
       if (allPinned.length > 0) {
         this.pinnedDanmaku = [allPinned[this.currentPinnedIndex % allPinned.length]]
@@ -529,10 +569,10 @@ export default {
         'speaker-2': { color: '#4ecdc4', fontSize: '28px' }, // 其他说话人
         'speaker-3': { color: '#95e1d3', fontSize: '28px' }
       }
-      
+
       const speakerId = item.speakerId || 1
       const style = speakerStyles[`speaker-${speakerId}`] || speakerStyles['speaker-2']
-      
+
       return {
         color: style.color,
         fontSize: style.fontSize,
@@ -575,13 +615,13 @@ export default {
 // 模式一：未开始前
 .mode-before {
   display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    height: 100vh;
-    padding: 40px 40px 80px 40px;
-    gap: 40px;
-    align-items: center;
-    position: relative;
+  flex-direction: row;
+  justify-content: flex-start;
+  height: 100vh;
+  padding: 40px 40px 80px 40px;
+  gap: 40px;
+  align-items: center;
+  position: relative;
 }
 
 .qr-code-section {
@@ -693,8 +733,6 @@ export default {
     padding: 10px;
     border-radius: 8px;
   }
-
-
 }
 
 // 实时语音转写区域
@@ -796,10 +834,84 @@ export default {
   }
 }
 
+.wordcloud-board {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .wordcloud-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+}
+
+.wordcloud-carousel {
+  .chart-container {
+    flex: 1;
+    min-height: 400px;
+  }
+}
+
+/* Swiper Tab 样式 */
+.swiper-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 20px;
+
+  .swiper-tab {
+    padding: 10px 24px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+    }
+
+    &.active {
+      background: #fff;
+      color: #1890ff;
+      border-color: #1890ff;
+      box-shadow: 0 4px 12px rgba(24, 144, 255, 0.2);
+    }
+  }
+}
+
+.swiper-container {
+  width: 100%;
+  height: 500px;
+  
+  .swiper-wrapper {
+    height: 100%;
+  }
+}
+
+.speaker-carousel,
+.wordcloud-carousel {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .carousel-section {
   position: absolute;
-  bottom: 450px;
-  left: 400px;
+  bottom: 40px;
+  left: -250px;
   right: -300px;
   z-index: 50;
 }

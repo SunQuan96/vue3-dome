@@ -9,7 +9,7 @@ import 'vant/lib/index.css'
 
 // VConsole (开发环境)
 if (import.meta.env.DEV) {
-  import('vconsole').then((VConsole) => {
+  import('vconsole').then(VConsole => {
     new VConsole.default()
   })
 }

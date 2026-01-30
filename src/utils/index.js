@@ -48,7 +48,7 @@ export function throttle(func, wait = 300) {
 export function deepClone(obj) {
   if (obj === null || typeof obj !== 'object') return obj
   if (obj instanceof Date) return new Date(obj.getTime())
-  if (obj instanceof Array) return obj.map((item) => deepClone(item))
+  if (obj instanceof Array) return obj.map(item => deepClone(item))
   if (typeof obj === 'object') {
     const clonedObj = {}
     for (const key in obj) {

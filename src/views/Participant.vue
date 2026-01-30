@@ -47,9 +47,7 @@
     </div>
 
     <!-- 加载提示 -->
-    <van-loading v-if="sending" type="spinner" class="sending-loading">
-      发送中...
-    </van-loading>
+    <van-loading v-if="sending" type="spinner" class="sending-loading"> 发送中... </van-loading>
   </div>
 </template>
 
@@ -65,7 +63,8 @@ export default {
     return {
       activityId: '',
       activityTitle: '春茗主题讲座',
-      backgroundImage: 'https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+      backgroundImage:
+        'https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
       danmakuContent: '',
       isInputExpanded: false,
       isAnonymous: false,
@@ -155,7 +154,7 @@ export default {
           isAnonymous: this.isAnonymous,
           sender: this.isAnonymous ? null : '用户' + Math.floor(Math.random() * 1000)
         }
-        
+
         const saved = saveLocalDanmaku(this.activityId, danmaku)
         if (saved) {
           showToast('发送成功')
@@ -231,7 +230,6 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   z-index: 150;
 
   .header-title {
@@ -279,7 +277,7 @@ export default {
 
 .input-section {
   position: fixed;
-  bottom: 0;
+  bottom: 10;
   left: 0;
   right: 0;
   background: #fff;
