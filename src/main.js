@@ -7,6 +7,9 @@ import App from './App.vue'
 import Vant from 'vant'
 import 'vant/lib/index.css'
 
+// ECharts wordcloud 扩展
+import 'echarts-wordcloud'
+
 // VConsole (开发环境)
 if (import.meta.env.DEV) {
   import('vconsole').then(VConsole => {
