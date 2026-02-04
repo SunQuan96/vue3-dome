@@ -1,5 +1,17 @@
 <template>
   <div class="screen-display">
+    <!-- 导航栏 -->
+    <van-nav-bar 
+      title="公屏端"
+      left-arrow
+      @click-left="goBack"
+      fixed
+    >
+      <template #right>
+        <van-icon name="search" size="18" />
+      </template>
+    </van-nav-bar>
+
     <!-- 模式一：未开始前 -->
     <div v-if="mode === 'before'" class="mode-before">
       <!-- 活动二维码 -->
@@ -124,6 +136,9 @@
         </div>
       </div>
     </div>
+    
+    <!-- 底部导航 -->
+    <BottomNavigation current-tab="screen" @tab-change="onTabChange" />
   </div>
 </template>
 
@@ -132,6 +147,7 @@ import WordCloud from '@/components/wordCloud.vue'
 import DanmakuDisplay from '@/components/DanmakuDisplay.vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
+import BottomNavigation from '@/components/BottomNavigation.vue'
 
 // 简单的二维码生成（使用在线服务）
 function generateQRCode(text) {
@@ -145,7 +161,8 @@ export default {
     WordCloud,
     DanmakuDisplay,
     Swiper,
-    SwiperSlide
+    SwiperSlide,
+    BottomNavigation
   },
   data() {
     return {
@@ -275,6 +292,17 @@ export default {
     // Swiper滑动变化
     onSlideChange(swiper) {
       this.activeTab = swiper.activeIndex
+    },
+
+    // 返回上一页
+    goBack() {
+      this.$router.back()
+    },
+    
+    // 底部导航标签页变化
+    onTabChange(tabName) {
+      // 当标签页变化时，可以在这里处理一些逻辑
+      console.log('标签页切换到:', tabName)
     }
   }
 }
@@ -287,6 +315,8 @@ export default {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   overflow: hidden;
   position: relative;
+  padding-top: 46px; // 导航栏高度
+  padding-bottom: 50px; // 为底部导航栏留出空间
 }
 
 // 模式一：未开始前
@@ -294,7 +324,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100vh;
+  height: calc(100vh - 46px - 50px); // 减去导航栏高度和底部导航栏高度
   padding: 40px;
   align-items: center;
   position: relative;
@@ -391,7 +421,7 @@ export default {
 
 .mode-tabs-section {
   position: absolute;
-  bottom: 40px;
+  bottom: 100px; // 调整位置，避免与底部导航栏重叠
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
@@ -535,7 +565,7 @@ export default {
 
 .carousel-section {
   position: absolute;
-  bottom: 40px;
+  bottom: 100px; // 调整位置，避免与底部导航栏重叠
   left: -250px;
   right: -300px;
   z-index: 50;
@@ -576,7 +606,7 @@ export default {
 
 .mode-tabs-bottom {
   position: absolute;
-  bottom: 40px;
+  bottom: 100px; // 调整位置，避免与底部导航栏重叠
   left: 50%;
   transform: translateX(-50%);
   width: 100%;

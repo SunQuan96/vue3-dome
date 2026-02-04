@@ -162,12 +162,7 @@
       </div>
 
       <!-- 底部导航 -->
-      <van-tabbar v-model="activeTab" fixed>
-        <van-tabbar-item name="home" icon="home-o" @click="goHome">首页</van-tabbar-item>
-        <van-tabbar-item name="market" icon="chart-trending-o" @click="goMarket">市场</van-tabbar-item>
-        <van-tabbar-item name="collection" icon="photo-o" @click="goCollections">我的藏品</van-tabbar-item>
-        <van-tabbar-item name="profile" icon="user-o" @click="goProfile">个人中心</van-tabbar-item>
-      </van-tabbar>
+      <BottomNavigation :current-tab="activeTab" @tab-change="onTabChange" />
     </div>
 
     <!-- 购买确认对话框 -->
@@ -211,12 +206,17 @@ import SwiperCore, { Pagination, Navigation } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
+import BottomNavigation from '@/components/BottomNavigation.vue'
+
+// 注册 Swiper 模块
+SwiperCore.use([Pagination, Navigation])
 
 export default {
   name: 'CollectionDetail',
   components: {
     Swiper,
-    SwiperSlide
+    SwiperSlide,
+    BottomNavigation
   },
   data() {
     return {
@@ -269,20 +269,9 @@ export default {
       this.$router.back()
     },
     
-    goHome() {
-      this.$router.push('/')
-    },
-    
-    goMarket() {
-      this.$router.push('/ScreenDisplay')
-    },
-    
-    goCollections() {
-      this.$router.push('/collections')
-    },
-    
-    goProfile() {
-      this.$router.push('/GeekProfile')
+    onTabChange(tabName) {
+      // 当标签页变化时更新本地状态
+      this.activeTab = tabName
     },
     
     loadCollectionData(id) {
@@ -455,7 +444,7 @@ export default {
 .swiper-section {
   position: relative;
   background: #000;
-  height: 400px;
+  height: 450px; // 增加高度以更好地显示导航箭头和分页
   
   .collection-swiper {
     width: 100%;
@@ -477,47 +466,64 @@ export default {
     
     // Swiper样式覆盖 - 适配vue-awesome-swiper
     :deep(.swiper-pagination-bullet) {
-      width: 8px;
-      height: 8px;
-      background: rgba(255, 255, 255, 0.5);
+      width: 10px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.7);
       opacity: 1;
+      margin: 0 4px;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.9);
+        transform: scale(1.2);
+      }
       
       &.swiper-pagination-bullet-active {
         background: #1989fa;
-        width: 20px;
-        border-radius: 4px;
+        width: 24px;
+        border-radius: 6px;
+        transform: scale(1.1);
       }
     }
     
     :deep(.swiper-button-prev),
     :deep(.swiper-button-next) {
       color: #fff;
-      width: 40px;
-      height: 40px;
-      background: rgba(0, 0, 0, 0.3);
+      width: 44px;
+      height: 44px;
+      background: rgba(0, 0, 0, 0.4);
       border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
       
       &::after {
-        font-size: 18px;
+        font-size: 20px;
         font-weight: bold;
       }
       
       &:hover {
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.6);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: scale(1.1);
+      }
+      
+      &.swiper-button-disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
       }
     }
     
     :deep(.swiper-button-prev) {
-      left: 10px;
+      left: 20px;
     }
     
     :deep(.swiper-button-next) {
-      right: 10px;
+      right: 20px;
     }
     
     // 添加分页器容器样式
     :deep(.swiper-pagination) {
-      bottom: 10px;
+      bottom: 20px;
     }
   }
   

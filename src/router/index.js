@@ -64,6 +64,14 @@ const routes = [
     meta: {
       title: '藏品详情'
     }
+  },
+  {
+    path: '/collections',
+    name: 'Collections',
+    component: () => import('@/views/Collections.vue'),
+    meta: {
+      title: '我的藏品'
+    }
   }
 ]
 

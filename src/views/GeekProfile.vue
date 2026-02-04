@@ -162,12 +162,20 @@
       <!-- 粒子效果容器 -->
       <div class="particles-container" ref="particlesContainer"></div>
     </div>
+    
+    <!-- 底部导航 -->
+    <BottomNavigation current-tab="profile" @tab-change="onTabChange" />
   </div>
 </template>
 
 <script>
+import BottomNavigation from '@/components/BottomNavigation.vue'
+
 export default {
   name: 'GeekProfile',
+  components: {
+    BottomNavigation
+  },
   data() {
     return {
       isCollapsed: false,
@@ -302,6 +310,11 @@ export default {
         link.href = 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css'
         document.head.appendChild(link)
       }
+    },
+    
+    onTabChange(tabName) {
+      // 当标签页变化时，可以在这里处理一些逻辑
+      console.log('标签页切换到:', tabName)
     }
   }
 }
@@ -312,6 +325,7 @@ export default {
   min-height: 100vh;
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   padding-top: 46px; // 导航栏高度
+  padding-bottom: 50px; // 为底部导航栏留出空间
 }
 
 .profile-container {

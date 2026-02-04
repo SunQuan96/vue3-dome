@@ -23,15 +23,22 @@
         <p>Token: {{ token || '无' }}</p>
       </div>
     </div>
+    
+    <!-- 底部导航 -->
+    <BottomNavigation current-tab="home" @tab-change="onTabChange" />
   </div>
 </template>
 
 <script>
 import { useUserStore } from '@/store'
 import { showToast } from 'vant'
+import BottomNavigation from '@/components/BottomNavigation.vue'
 
 export default {
   name: 'Home',
+  components: {
+    BottomNavigation
+  },
   computed: {
     isLogin() {
       const userStore = useUserStore()
@@ -60,6 +67,11 @@ export default {
     },
     goToGeekProfile() {
       this.$router.push('/geek-profile')
+    },
+    
+    onTabChange(tabName) {
+      // 当标签页变化时，可以在这里处理一些逻辑
+      console.log('标签页切换到:', tabName)
     }
   }
 }
@@ -68,6 +80,7 @@ export default {
 <style lang="scss" scoped>
 .home {
   padding-top: 46px;
+  padding-bottom: 50px; // 为底部导航栏留出空间
   min-height: 100vh;
   background-color: #f7f8fa;
 }
