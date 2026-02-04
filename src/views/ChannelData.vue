@@ -7,14 +7,19 @@
   </div>
 </template>
 
-<script setup>
-import { useRouter } from 'vue-router'
+<script>
 import ChannelData from '@/components/channelData.vue'
 
-const router = useRouter()
-
-const goBack = () => {
-  router.back()
+export default {
+  name: 'ChannelDataPage',
+  components: {
+    ChannelData
+  },
+  methods: {
+    goBack() {
+      this.$router.back()
+    }
+  }
 }
 </script>
 

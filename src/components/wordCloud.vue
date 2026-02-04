@@ -158,7 +158,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .chart-container {
   width: 100%;
   height: 500px;

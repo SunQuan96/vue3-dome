@@ -25,15 +25,21 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+<script>
 import packageInfo from '../../package.json'
 
-const router = useRouter()
-
-const goBack = () => {
-  router.back()
+export default {
+  name: 'About',
+  data() {
+    return {
+      packageInfo: packageInfo
+    }
+  },
+  methods: {
+    goBack() {
+      this.$router.back()
+    }
+  }
 }
 </script>
 

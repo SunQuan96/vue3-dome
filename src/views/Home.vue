@@ -15,6 +15,7 @@
         <van-button type="warning" block @click="goToChannelData"> 渠道数据页面 </van-button>
         <van-button type="primary" block @click="goToScreen"> 公屏端（电视展示） </van-button>
         <van-button type="info" block @click="goToParticipant"> 参与端（手机扫码） </van-button>
+        <van-button type="danger" block @click="goToGeekProfile"> 极客名片 </van-button>
       </div>
 
       <div class="info">
@@ -25,36 +26,42 @@
   </div>
 </template>
 
-<script setup>
-import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+<script>
 import { useUserStore } from '@/store'
 import { showToast } from 'vant'
 
-const router = useRouter()
-const userStore = useUserStore()
-
-const isLogin = computed(() => userStore.isLogin)
-const token = computed(() => userStore.token)
-
-const handleClick = () => {
-  showToast('按钮点击成功！')
-}
-
-const goToAbout = () => {
-  router.push('/about')
-}
-
-const goToChannelData = () => {
-  router.push('/channel-data')
-}
-
-const goToScreen = () => {
-  router.push('/screen?activityId=default')
-}
-
-const goToParticipant = () => {
-  router.push('/participant?activityId=default')
+export default {
+  name: 'Home',
+  computed: {
+    isLogin() {
+      const userStore = useUserStore()
+      return userStore.isLogin
+    },
+    token() {
+      const userStore = useUserStore()
+      return userStore.token
+    }
+  },
+  methods: {
+    handleClick() {
+      showToast('按钮点击成功！')
+    },
+    goToAbout() {
+      this.$router.push('/about')
+    },
+    goToChannelData() {
+      this.$router.push('/channel-data')
+    },
+    goToScreen() {
+      this.$router.push('/screen?activityId=default')
+    },
+    goToParticipant() {
+      this.$router.push('/participant?activityId=default')
+    },
+    goToGeekProfile() {
+      this.$router.push('/geek-profile')
+    }
+  }
 }
 </script>
 

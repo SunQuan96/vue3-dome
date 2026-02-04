@@ -4,8 +4,10 @@
   </div>
 </template>
 
-<script setup>
-// App 根组件
+<script>
+export default {
+  name: 'App'
+}
 </script>
 
 <style lang="scss">

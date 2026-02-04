@@ -5,13 +5,16 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  msg: {
-    type: String,
-    default: 'Hello World'
+<script>
+export default {
+  name: 'HelloWorld',
+  props: {
+    msg: {
+      type: String,
+      default: 'Hello World'
+    }
   }
-})
+}
 </script>
 
 <style lang="scss" scoped>

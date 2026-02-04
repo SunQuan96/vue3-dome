@@ -48,6 +48,14 @@ const routes = [
     meta: {
       title: '参与端'
     }
+  },
+  {
+    path: '/geek-profile',
+    name: 'GeekProfile',
+    component: () => import('@/views/GeekProfile.vue'),
+    meta: {
+      title: '极客名片'
+    }
   }
 ]
 

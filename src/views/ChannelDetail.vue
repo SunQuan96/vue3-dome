@@ -15,17 +15,24 @@
   </div>
 </template>
 
-<script setup>
-import { useRouter, useRoute } from 'vue-router'
-
-const router = useRouter()
-const route = useRoute()
-
-const type = route.query.type || '未知'
-const id = route.query.id || '未知'
-
-const goBack = () => {
-  router.back()
+<script>
+export default {
+  name: 'ChannelDetail',
+  data() {
+    return {
+      type: '未知',
+      id: '未知'
+    }
+  },
+  created() {
+    this.type = this.$route.query.type || '未知'
+    this.id = this.$route.query.id || '未知'
+  },
+  methods: {
+    goBack() {
+      this.$router.back()
+    }
+  }
 }
 </script>
 
