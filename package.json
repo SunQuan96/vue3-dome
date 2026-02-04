@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --cors true --host --port 8080 --open true",
-    "serve": "vite --cors true --host --port 8080 --open true",
+    "dev": "vite --cors true --host 127.0.0.1 --port 5173 --open true",
+    "serve": "vite --cors true --host 127.0.0.1 --port 5173 --open true",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",

@@ -56,6 +56,14 @@ const routes = [
     meta: {
       title: '极客名片'
     }
+  },
+  {
+    path: '/collection/:id',
+    name: 'CollectionDetail',
+    component: () => import('@/views/CollectionDetail.vue'),
+    meta: {
+      title: '藏品详情'
+    }
   }
 ]
 
