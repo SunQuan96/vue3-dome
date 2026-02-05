@@ -5,12 +5,11 @@
       title="公屏端"
       left-arrow
       @click-left="goBack"
-      fixed
-    >
-      <template #right>
+      fixed/>
+      <!-- <template #right>
         <van-icon name="search" size="18" />
-      </template>
-    </van-nav-bar>
+      </template> -->
+    <!-- </van-nav-bar> -->
 
     <!-- 模式一：未开始前 -->
     <div v-if="mode === 'before'" class="mode-before">

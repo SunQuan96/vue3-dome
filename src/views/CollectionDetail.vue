@@ -196,6 +196,13 @@
         <p class="dialog-tip">当前价格：¥{{ formatPrice(collection.price) }}</p>
       </div>
     </van-dialog>
+
+    <!-- 分享弹窗 -->
+    <ShareDialog
+      v-model="showShareDialog"
+      :collection-data="shareData"
+      @close="onShareDialogClose"
+    />
   </div>
 </template>
 
@@ -207,6 +214,7 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import BottomNavigation from '@/components/BottomNavigation.vue'
+import ShareDialog from '@/components/ShareDialog.vue'
 
 // 注册 Swiper 模块
 SwiperCore.use([Pagination, Navigation])
@@ -216,7 +224,8 @@ export default {
   components: {
     Swiper,
     SwiperSlide,
-    BottomNavigation
+    BottomNavigation,
+    ShareDialog
   },
   data() {
     return {
@@ -229,6 +238,7 @@ export default {
       offerPrice: '',
       blessingText: '恭喜获得35周年限定藏品！新征程，新起点，共创美好未来！',
       swiperInstance: null,
+      showShareDialog: false,
       collection: {
         id: '001',
         name: '新征程新起点35周年限定藏品',
@@ -378,33 +388,9 @@ export default {
     },
     
     handleShare() {
-      // 唤起分享功能
-      this.$toast.loading({
-        message: '准备分享...',
-        forbidClick: true,
-        duration: 800
-      })
-      
-      setTimeout(() => {
-        // 在实际应用中，这里应该调用原生分享或显示分享对话框
-        this.showShareDialog()
-      }, 1000)
-    },
-    
-    showShareDialog() {
-      this.$dialog.alert({
-        title: '分享藏品',
-        message: '选择分享方式',
-        showCancelButton: true,
-        confirmButtonText: '微信分享',
-        cancelButtonText: '复制链接'
-      }).then(() => {
-        // 微信分享
-        this.$toast.success('已唤起微信分享')
-      }).catch(() => {
-        // 复制链接
-        this.copyShareLink()
-      })
+      // 显示分享弹窗
+      console.log('分享按钮被点击')
+      this.showShareDialog = true
     },
     
     copyShareLink() {
@@ -422,6 +408,23 @@ export default {
         document.body.removeChild(textArea)
         this.$toast.success('链接已复制到剪贴板')
       })
+    },
+
+    onShareDialogClose() {
+      // 分享弹窗关闭时的处理
+      console.log('分享弹窗已关闭')
+    }
+  },
+  computed: {
+    shareData() {
+      return {
+        name: this.collection.name,
+        image: this.collection.images[0],
+        tags: this.collection.tags,
+        blessing: this.blessingText,
+        blockchainAddress: '0x' + Math.random().toString(16).slice(2, 10) + '...' + Math.random().toString(16).slice(2, 10),
+        holderName: '用户' + Math.floor(Math.random() * 1000) // 模拟用户姓名
+      }
     }
   }
 }

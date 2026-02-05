@@ -16,6 +16,24 @@
         <van-button type="primary" block @click="goToScreen"> 公屏端（电视展示） </van-button>
         <van-button type="info" block @click="goToParticipant"> 参与端（手机扫码） </van-button>
         <van-button type="danger" block @click="goToGeekProfile"> 极客名片 </van-button>
+        <van-button 
+          type="warning" 
+          block 
+          @click="goToLuckRank"
+          class="luck-rank-btn"
+        >
+          <van-icon name="medal" class="btn-icon" />
+          手气榜
+        </van-button>
+        <van-button 
+          type="primary" 
+          block 
+          @click="goToCollections"
+          class="collections-btn"
+        >
+          <van-icon name="gem" class="btn-icon" />
+          我的藏品
+        </van-button>
       </div>
 
       <div class="info">
@@ -68,6 +86,12 @@ export default {
     goToGeekProfile() {
       this.$router.push('/geek-profile')
     },
+    goToLuckRank() {
+      this.$router.push('/luck-rank')
+    },
+    goToCollections() {
+      this.$router.push('/collections')
+    },
     
     onTabChange(tabName) {
       // 当标签页变化时，可以在这里处理一些逻辑
@@ -94,6 +118,40 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  
+  .luck-rank-btn {
+     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+     border: none;
+     color: #fff;
+     font-weight: 600;
+     box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
+     
+     .btn-icon {
+       margin-right: 8px;
+     }
+     
+     &:active {
+       opacity: 0.9;
+       transform: translateY(1px);
+     }
+   }
+   
+   .collections-btn {
+     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+     border: none;
+     color: #fff;
+     font-weight: 600;
+     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+     
+     .btn-icon {
+       margin-right: 8px;
+     }
+     
+     &:active {
+       opacity: 0.9;
+       transform: translateY(1px);
+     }
+   }
 }
 
 .info {

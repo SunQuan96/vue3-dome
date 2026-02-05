@@ -26,11 +26,11 @@ const routes = [
     }
   },
   {
-    path: '/channel-detail',
-    name: 'ChannelDetail',
-    component: () => import('@/views/ChannelDetail.vue'),
+    path: '/luck-rank',
+    name: 'LuckRank',
+    component: () => import('@/views/LuckRank.vue'),
     meta: {
-      title: '渠道详情'
+      title: '手气榜'
     }
   },
   {
