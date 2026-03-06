@@ -25,5 +25,5 @@ export default defineConfig({
     chunkSizeWarningLimit: 1500
   },
   // GitHub Pages部署配置
-  base: process.env.NODE_ENV === 'production' ? '/vue3-dome/' : '/'
+  base: process.env.NODE_ENV === 'production' ? '/' : '/'
 })
