@@ -98,15 +98,15 @@ export default {
           {
             type: 'wordCloud',
             shape: 'circle',
-            sizeRange: [10, 100],
-            rotationRange: [0, 0],
-            gridSize: 38,
+            sizeRange: [20, 120],
+            rotationRange: [-30, 30],
+            gridSize: 25,
             textStyle: {
               fontFamily: 'Arial',
               fontWeight: 'bold',
               fontStyle: 'normal',
-              fontSize: 28,
-              lineHeight: 1.5
+              fontSize: 36,
+              lineHeight: 1.3
             },
             textShadow: {
               color: '#fff',
@@ -161,6 +161,7 @@ export default {
 <style lang="scss" scoped>
 .chart-container {
   width: 100%;
-  height: 500px;
+  height: 600px;
+  min-height: 600px;
 }
 </style>
