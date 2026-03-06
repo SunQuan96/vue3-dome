@@ -76,7 +76,8 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  // 兼容 GitHub Pages 项目站点部署在 `/<repo>/` 子路径下的情况
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes
 })
 
