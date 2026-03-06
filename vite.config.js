@@ -4,26 +4,31 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [vue(), vueJsx()],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  },
-  server: {
-    host: '0.0.0.0',
-    port: 8080,
-    cors: true,
-    open: true
-  },
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-    sourcemap: false,
-    minify: 'terser',
-    chunkSizeWarningLimit: 1500
-  },
-  // GitHub Pages部署配置
-  base: process.env.NODE_ENV === 'production' ? '/' : '/'
+export default defineConfig(({ mode }) => {
+  // GitHub Pages 通常部署在 `/<repo>/` 路径下；在 Actions 环境中可从 GITHUB_REPOSITORY 推断仓库名
+  const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1]
+  const base = mode === 'production' ? `/${repoName ?? 'vue3-dome'}/` : '/'
+
+  return {
+    plugins: [vue(), vueJsx()],
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      }
+    },
+    server: {
+      host: '0.0.0.0',
+      port: 8080,
+      cors: true,
+      open: true
+    },
+    build: {
+      outDir: 'dist',
+      assetsDir: 'assets',
+      sourcemap: false,
+      minify: 'terser',
+      chunkSizeWarningLimit: 1500
+    },
+    base
+  }
 })

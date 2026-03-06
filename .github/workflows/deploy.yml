@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: CI/CD Deploy (GitHub Pages)
 
 on:
   # 在推送到main分支时触发
@@ -37,6 +37,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Lint
+        run: npm run lint
 
       - name: Build
         run: npm run build

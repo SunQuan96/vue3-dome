@@ -1,5 +1,5 @@
-# 简单的GitHub Pages部署工作流
-name: Deploy to GitHub Pages
+# 简单的 GitHub Pages 部署工作流
+name: Pages Deploy
 
 on:
   push:
