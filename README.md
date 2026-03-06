@@ -104,6 +104,33 @@ VITE_API_BASE_URL=http://localhost:3000/api
 VITE_APP_TITLE=Vue3 项目
 ```
 
+## 后端（Node + Express 微信登录）
+
+后端代码放在 `server/` 目录，用于支持微信扫码登录。
+
+### 后端环境配置
+
+在 `server` 目录下复制 `.env.example` 为 `.env`，并填写你的微信开放平台配置：
+
+```env
+WECHAT_APPID=你的微信 APPID
+WECHAT_SECRET=你的微信 SECRET
+JWT_SECRET=随便生成一个复杂一点的字符串
+WECHAT_REDIRECT_URL=https://你的域名/auth/wechat/callback
+```
+
+> `WECHAT_REDIRECT_URL` 需要在微信开放平台配置为合法回调地址。
+
+### 启动后端服务
+
+```bash
+cd server
+npm install
+npm run dev
+```
+
+默认监听在 `http://localhost:3000`，前端的 `VITE_API_BASE_URL` 已经示例指向 `http://localhost:3000/api`，你可以根据实际情况调整。
+
 ## 开发规范
 
 - 使用 ESLint 进行代码检查

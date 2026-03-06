@@ -72,6 +72,14 @@ const routes = [
     meta: {
       title: '我的藏品'
     }
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/Login.vue'),
+    meta: {
+      title: '登录'
+    }
   }
 ]
 

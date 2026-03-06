@@ -18,5 +18,22 @@ export const api = {
       method: 'post',
       data
     })
+  },
+
+  // 微信扫码登录 - 获取二维码
+  wechatLoginQrcode: () => {
+    return request({
+      url: '/auth/wechat/qrcode',
+      method: 'get'
+    })
+  },
+
+  // 微信扫码登录 - 轮询登录状态
+  wechatLoginStatus: params => {
+    return request({
+      url: '/auth/wechat/status',
+      method: 'get',
+      params
+    })
   }
 }
