@@ -1,6 +1,13 @@
 # Vue3 项目
 
+![GitHub Pages](https://github.com/SunQuan96/vue3-dome/actions/workflows/pages.yml/badge.svg)
+![GitHub last commit](https://img.shields.io/github/last-commit/SunQuan96/vue3-dome)
+![GitHub repo size](https://img.shields.io/github/repo-size/SunQuan96/vue3-dome)
+![GitHub](https://img.shields.io/github/license/SunQuan96/vue3-dome)
+
 基于 Vue 3 + Vite + Vant 的移动端项目模板
+
+🌐 **在线演示**: [https://sunquan96.github.io/vue3-dome/](https://sunquan96.github.io/vue3-dome/)
 
 ## 技术栈
 

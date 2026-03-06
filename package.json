@@ -8,8 +8,9 @@
     "serve": "vite --cors true --host 127.0.0.1 --port 5173 --open true",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix",
+    "format": "prettier --write src/",
+    "deploy": "npm run build && gh-pages -d dist -t true"
   },
   "dependencies": {
     "@vant/touch-emulator": "^1.4.0",
@@ -37,6 +38,7 @@
     "@vue/eslint-config-prettier": "^8.0.0",
     "eslint": "^9.21.0",
     "eslint-plugin-vue": "^9.32.0",
+    "gh-pages": "^6.2.0",
     "prettier": "^3.0.3",
     "sass": "^1.85.1",
     "terser": "^5.46.0",
