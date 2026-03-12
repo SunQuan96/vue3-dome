@@ -96,7 +96,9 @@ export default {
           views: 1250,
           likes: 89,
           isNew: true,
-          createdAt: '2026-02-28'
+          createdAt: '2026-02-28',
+          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
+          backgroundColor: 'transparent'
         },
         {
           id: '002',
@@ -107,7 +109,9 @@ export default {
           views: 980,
           likes: 76,
           isNew: false,
-          createdAt: '2026-02-25'
+          createdAt: '2026-02-25',
+          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/Duck/glTF-Binary/Duck.glb',
+          backgroundColor: 'transparent'
         },
         {
           id: '003',
@@ -118,7 +122,9 @@ export default {
           views: 1560,
           likes: 102,
           isNew: true,
-          createdAt: '2026-03-01'
+          createdAt: '2026-03-01',
+          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/Box/glTF-Binary/Box.glb',
+          backgroundColor: 'transparent'
         },
         {
           id: '004',
@@ -129,7 +135,9 @@ export default {
           views: 890,
           likes: 65,
           isNew: false,
-          createdAt: '2026-02-20'
+          createdAt: '2026-02-20',
+          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb',
+          backgroundColor: 'transparent'
         },
         {
           id: '005',
@@ -140,7 +148,9 @@ export default {
           views: 1120,
           likes: 94,
           isNew: false,
-          createdAt: '2026-02-22'
+          createdAt: '2026-02-22',
+          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/BoxInterleaved/glTF-Binary/BoxInterleaved.glb',
+          backgroundColor: 'transparent'
         },
         {
           id: '006',
@@ -151,7 +161,9 @@ export default {
           views: 1340,
           likes: 88,
           isNew: true,
-          createdAt: '2026-02-27'
+          createdAt: '2026-02-27',
+          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/BoxVertexColors/glTF-Binary/BoxVertexColors.glb',
+          backgroundColor: 'transparent'
         }
       ]
     }

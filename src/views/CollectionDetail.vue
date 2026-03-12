@@ -1,44 +1,34 @@
 <template>
   <div class="collection-detail">
     <!-- 导航栏 -->
-    <van-nav-bar 
-      title="藏品详情" 
-      left-arrow 
-      @click-left="goBack"
-      fixed
-    />
+    <van-nav-bar title="藏品详情" left-arrow @click-left="goBack" fixed />
 
     <!-- 页面内容 -->
     <div class="detail-container">
       <!-- 藏品图片轮播图 -->
       <div class="swiper-section">
-        <Swiper
-          :slides-per-view="1"
-          :space-between="0"
-          :pagination="{ clickable: true }"
-          :navigation="true"
-          @swiper="onSwiperReady"
-          @slide-change="onSlideChange"
-          class="collection-swiper"
-        >
+        <Swiper :slides-per-view="1" :space-between="0" :pagination="{ clickable: true }" :navigation="true"
+          @swiper="onSwiperReady" @slide-change="onSlideChange" class="collection-swiper">
           <SwiperSlide v-for="(image, index) in collection.images" :key="index">
             <div class="swiper-slide-content">
-              <img 
-                :src="image" 
-                :alt="`藏品图片${index + 1}`"
-                class="swiper-image"
-              />
+              <img :src="image" :alt="`藏品图片${index + 1}`" class="swiper-image" />
             </div>
           </SwiperSlide>
         </Swiper>
-        
+
         <!-- 收藏按钮 -->
         <div class="favorite-btn" @click="toggleFavorite">
-          <van-icon 
-            :name="isFavorite ? 'star' : 'star-o'" 
-            :color="isFavorite ? '#ffd700' : '#999'"
-            size="24"
-          />
+          <van-icon :name="isFavorite ? 'star' : 'star-o'" :color="isFavorite ? '#ffd700' : '#999'" size="24" />
+        </div>
+      </div>
+
+      <!-- 3D 模型展示 -->
+      <div class="model-section" v-if="collection.modelUrl">
+        <h3 class="section-title">3D 模型预览</h3>
+        <p class="section-hint">触摸拖拽可旋转模型</p>
+        <div class="model-container">
+          <GlbModel :model-url="collection.modelUrl" :background-color="collection.backgroundColor"
+            @changeisgesture="handleGestureChange" />
         </div>
       </div>
 
@@ -47,12 +37,7 @@
         <div class="collection-header">
           <h1 class="collection-name">{{ collection.name }}</h1>
           <div class="collection-tags">
-            <van-tag 
-              v-for="tag in collection.tags"
-              :key="tag"
-              type="primary"
-              size="medium"
-            >
+            <van-tag v-for="tag in collection.tags" :key="tag" type="primary" size="medium">
               {{ tag }}
             </van-tag>
           </div>
@@ -66,10 +51,7 @@
           </div>
           <div class="price-change">
             <span class="change-label">24小时涨跌幅</span>
-            <span 
-              class="change-value"
-              :class="{ up: collection.priceChange > 0, down: collection.priceChange < 0 }"
-            >
+            <span class="change-value" :class="{ up: collection.priceChange > 0, down: collection.priceChange < 0 }">
               {{ collection.priceChange > 0 ? '+' : '' }}{{ collection.priceChange }}%
             </span>
           </div>
@@ -79,11 +61,7 @@
         <div class="attributes-section">
           <h2 class="section-title">藏品属性</h2>
           <div class="attributes-grid">
-            <div 
-              v-for="attr in collection.attributes"
-              :key="attr.name"
-              class="attribute-item"
-            >
+            <div v-for="attr in collection.attributes" :key="attr.name" class="attribute-item">
               <span class="attr-name">{{ attr.name }}</span>
               <span class="attr-value">{{ attr.value }}</span>
             </div>
@@ -102,16 +80,8 @@
         <div class="blessing-section">
           <h2 class="section-title">祝福语</h2>
           <div class="blessing-content">
-            <van-field
-              v-model="blessingText"
-              type="textarea"
-              rows="3"
-              placeholder="点击输入您的祝福语..."
-              :readonly="false"
-              @focus="onBlessingFocus"
-              @blur="onBlessingBlur"
-              class="blessing-input"
-            />
+            <van-field v-model="blessingText" type="textarea" rows="3" placeholder="点击输入您的祝福语..." :readonly="false"
+              @focus="onBlessingFocus" @blur="onBlessingBlur" class="blessing-input" />
             <p class="blessing-tip">展示抽中当次发送的祝福语，可手动修改</p>
           </div>
         </div>
@@ -149,12 +119,7 @@
 
         <!-- 操作按钮 -->
         <div class="action-buttons">
-          <van-button 
-            type="primary" 
-            size="large"
-            @click="handleShare"
-            class="share-btn"
-          >
+          <van-button type="primary" size="large" @click="handleShare" class="share-btn">
             <van-icon name="share-o" size="18" />
             分享
           </van-button>
@@ -166,12 +131,7 @@
     </div>
 
     <!-- 购买确认对话框 -->
-    <van-dialog
-      v-model="showBuyDialog"
-      title="确认购买"
-      show-cancel-button
-      @confirm="confirmBuy"
-    >
+    <van-dialog v-model="showBuyDialog" title="确认购买" show-cancel-button @confirm="confirmBuy">
       <div class="dialog-content">
         <p>确认购买藏品《{{ collection.name }}》？</p>
         <p class="dialog-price">价格：¥{{ formatPrice(collection.price) }}</p>
@@ -179,30 +139,16 @@
     </van-dialog>
 
     <!-- 出价对话框 -->
-    <van-dialog
-      v-model="showOfferDialog"
-      title="出价购买"
-      show-cancel-button
-      @confirm="confirmOffer"
-    >
+    <van-dialog v-model="showOfferDialog" title="出价购买" show-cancel-button @confirm="confirmOffer">
       <div class="dialog-content">
         <p>为藏品《{{ collection.name }}》出价</p>
-        <van-field
-          v-model="offerPrice"
-          label="出价金额"
-          placeholder="请输入出价金额"
-          type="number"
-        />
+        <van-field v-model="offerPrice" label="出价金额" placeholder="请输入出价金额" type="number" />
         <p class="dialog-tip">当前价格：¥{{ formatPrice(collection.price) }}</p>
       </div>
     </van-dialog>
 
     <!-- 分享弹窗 -->
-    <ShareDialog
-      v-model="showShareDialog"
-      :collection-data="shareData"
-      @close="onShareDialogClose"
-    />
+    <ShareDialog v-model="showShareDialog" :collection-data="shareData" @close="onShareDialogClose" />
   </div>
 </template>
 
@@ -215,6 +161,7 @@ import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import BottomNavigation from '@/components/BottomNavigation.vue'
 import ShareDialog from '@/components/ShareDialog.vue'
+import GlbModel from '@/components/GlbModel.vue'
 
 // 注册 Swiper 模块
 SwiperCore.use([Pagination, Navigation])
@@ -225,7 +172,8 @@ export default {
     Swiper,
     SwiperSlide,
     BottomNavigation,
-    ShareDialog
+    ShareDialog,
+    GlbModel
   },
   data() {
     return {
@@ -239,34 +187,37 @@ export default {
       blessingText: '恭喜获得35周年限定藏品！新征程，新起点，共创美好未来！',
       swiperInstance: null,
       showShareDialog: false,
-      collection: {
-        id: '001',
-        name: '新征程新起点35周年限定藏品',
-        images: [
-          'https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-          'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-          'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-          'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-        ],
-        price: 0, // 限定藏品可能免费
-        priceChange: 0,
-        tags: ['35周年限定', '限量700个', '纪念藏品'],
-        attributes: [
-          { name: '发行方', value: '新征程新起点组委会' },
-          { name: '藏品类型', value: '35周年纪念限定' },
-          { name: '发行数量', value: '700个' },
-          { name: '藏品编号', value: '#001/700' },
-          { name: '发行时间', value: '2023年12月' },
-          { name: '纪念意义', value: '35周年里程碑' },
-          { name: '附加权益', value: '实体勋章邮寄' },
-          { name: '收藏价值', value: '纪念珍藏' }
-        ],
-        description: '《新征程新起点35周年限定藏品》是为庆祝重要里程碑特别发行的纪念数字藏品。每一件都承载着35年的辉煌历程与美好回忆，象征着新的开始与无限可能。此藏品不仅具有数字收藏价值，还附赠实体勋章好礼，活动结束后将统一邮寄至获奖者手中。',
-        totalSupply: 700,
-        holders: 350,
-        tradeCount: 0,
-        createdAt: '2023-12-01T10:00:00Z'
-      }
+      // collection: {
+      //   id: '001',
+      //   name: '新征程新起点35周年限定藏品',
+      //   images: [
+      //     'https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      //     'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      //     'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      //     'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+      //   ],
+      //   price: 0, // 限定藏品可能免费
+      //   priceChange: 0,
+      //   tags: ['35周年限定', '限量700个', '纪念藏品'],
+      //   attributes: [
+      //     { name: '发行方', value: '新征程新起点组委会' },
+      //     { name: '藏品类型', value: '35周年纪念限定' },
+      //     { name: '发行数量', value: '700个' },
+      //     { name: '藏品编号', value: '#001/700' },
+      //     { name: '发行时间', value: '2023年12月' },
+      //     { name: '纪念意义', value: '35周年里程碑' },
+      //     { name: '附加权益', value: '实体勋章邮寄' },
+      //     { name: '收藏价值', value: '纪念珍藏' }
+      //   ],
+      //   description: '《新征程新起点35周年限定藏品》是为庆祝重要里程碑特别发行的纪念数字藏品。每一件都承载着35年的辉煌历程与美好回忆，象征着新的开始与无限可能。此藏品不仅具有数字收藏价值，还附赠实体勋章好礼，活动结束后将统一邮寄至获奖者手中。',
+      //   totalSupply: 700,
+      //   holders: 350,
+      //   tradeCount: 0,
+      //   createdAt: '2023-12-01T10:00:00Z',
+      //   modelUrl: 'https://gcore.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
+      //   backgroundColor: 'transparent'
+      // }
+      collection: {},
     }
   },
   created() {
@@ -278,27 +229,211 @@ export default {
     goBack() {
       this.$router.back()
     },
-    
+
     onTabChange(tabName) {
       // 当标签页变化时更新本地状态
       this.activeTab = tabName
     },
-    
+
     loadCollectionData(id) {
-      // 这里应该调用API获取藏品数据
-      // 暂时使用模拟数据
-      console.log('加载藏品数据:', id)
+      const collectionsData = [
+        {
+          id: '001',
+          name: '新征程新起点35周年限定藏品',
+          images: [
+            'https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          ],
+          price: 0,
+          priceChange: 0,
+          tags: ['35周年限定', '限量700个', '纪念藏品'],
+          attributes: [
+            { name: '发行方', value: '新征程新起点组委会' },
+            { name: '藏品类型', value: '35周年纪念限定' },
+            { name: '发行数量', value: '700个' },
+            { name: '藏品编号', value: '#001/700' },
+            { name: '发行时间', value: '2023年12月' },
+            { name: '纪念意义', value: '35周年里程碑' },
+            { name: '附加权益', value: '实体勋章邮寄' },
+            { name: '收藏价值', value: '纪念珍藏' }
+          ],
+          description: '《新征程新起点35周年限定藏品》是为庆祝重要里程碑特别发行的纪念数字藏品。每一件都承载着35年的辉煌历程与美好回忆，象征着新的开始与无限可能。此藏品不仅具有数字收藏价值，还附赠实体勋章好礼，活动结束后将统一邮寄至获奖者手中。',
+          totalSupply: 700,
+          holders: 350,
+          tradeCount: 0,
+          createdAt: '2023-12-01T10:00:00Z',
+          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
+          backgroundColor: 'transparent'
+        },
+        {
+          id: '002',
+          name: 'TypeScript 高级技巧',
+          images: [
+            'https://images.unsplash.com/photo-1516116216624-53e697fedbea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          ],
+          price: 0,
+          priceChange: 0,
+          tags: ['TypeScript', '类型系统'],
+          attributes: [
+            { name: '发行方', value: 'Microsoft' },
+            { name: '藏品类型', value: '技术教程' },
+            { name: '发行数量', value: '1000个' },
+            { name: '藏品编号', value: '#002/1000' },
+            { name: '发行时间', value: '2024年1月' },
+            { name: '技术价值', value: '类型系统进阶' },
+            { name: '附加权益', value: '源码访问权限' },
+            { name: '收藏价值', value: '技术珍藏' }
+          ],
+          description: '实用TypeScript类型体操和工程实践，深入理解类型系统的强大之处。',
+          totalSupply: 1000,
+          holders: 500,
+          tradeCount: 0,
+          createdAt: '2024-01-15T10:00:00Z',
+          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/Duck/glTF-Binary/Duck.glb',
+          backgroundColor: 'transparent'
+        },
+        {
+          id: '003',
+          name: '微前端架构设计',
+          images: [
+            'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          ],
+          price: 0,
+          priceChange: 0,
+          tags: ['微前端', 'qiankun'],
+          attributes: [
+            { name: '发行方', value: '蚂蚁金服' },
+            { name: '藏品类型', value: '架构设计' },
+            { name: '发行数量', value: '500个' },
+            { name: '藏品编号', value: '#003/500' },
+            { name: '发行时间', value: '2024年2月' },
+            { name: '技术价值', value: '微前端实战' },
+            { name: '附加权益', value: '架构图赠送' },
+            { name: '收藏价值', value: '架构珍藏' }
+          ],
+          description: '基于qiankun的微前端解决方案，探索大型前端应用架构设计。',
+          totalSupply: 500,
+          holders: 250,
+          tradeCount: 0,
+          createdAt: '2024-02-20T10:00:00Z',
+          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/Box/glTF-Binary/Box.glb',
+          backgroundColor: 'transparent'
+        },
+        {
+          id: '004',
+          name: 'Node.js性能优化',
+          images: [
+            'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          ],
+          price: 0,
+          priceChange: 0,
+          tags: ['Node.js', '性能优化'],
+          attributes: [
+            { name: '发行方', value: 'Node.js 基金会' },
+            { name: '藏品类型', value: '性能优化' },
+            { name: '发行数量', value: '800个' },
+            { name: '藏品编号', value: '#004/800' },
+            { name: '发行时间', value: '2024年3月' },
+            { name: '技术价值', value: '性能调优实战' },
+            { name: '附加权益', value: '性能报告赠送' },
+            { name: '收藏价值', value: '性能珍藏' }
+          ],
+          description: 'Node.js应用性能监控与优化策略，打造高性能后端服务。',
+          totalSupply: 800,
+          holders: 400,
+          tradeCount: 0,
+          createdAt: '2024-03-10T10:00:00Z',
+          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb',
+          backgroundColor: 'transparent'
+        },
+        {
+          id: '005',
+          name: 'React 18新特性',
+          images: [
+            'https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          ],
+          price: 0,
+          priceChange: 0,
+          tags: ['React 18', '新特性'],
+          attributes: [
+            { name: '发行方', value: 'Facebook' },
+            { name: '藏品类型', value: '前端框架' },
+            { name: '发行数量', value: '1200个' },
+            { name: '藏品编号', value: '#005/1200' },
+            { name: '发行时间', value: '2024年4月' },
+            { name: '技术价值', value: '并发渲染深入' },
+            { name: '附加权益', value: '示例代码赠送' },
+            { name: '收藏价值', value: '框架珍藏' }
+          ],
+          description: '并发渲染和Suspense的深度解析，掌握React最新特性。',
+          totalSupply: 1200,
+          holders: 600,
+          tradeCount: 0,
+          createdAt: '2024-04-05T10:00:00Z',
+          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/BoxInterleaved/glTF-Binary/BoxInterleaved.glb',
+          backgroundColor: 'transparent'
+        },
+        {
+          id: '006',
+          name: 'Docker容器化部署',
+          images: [
+            'https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          ],
+          price: 0,
+          priceChange: 0,
+          tags: ['Docker', 'DevOps'],
+          attributes: [
+            { name: '发行方', value: 'Docker Inc' },
+            { name: '藏品类型', value: '容器技术' },
+            { name: '发行数量', value: '600个' },
+            { name: '藏品编号', value: '#006/600' },
+            { name: '发行时间', value: '2024年5月' },
+            { name: '技术价值', value: '容器化部署' },
+            { name: '附加权益', value: 'Dockerfile赠送' },
+            { name: '收藏价值', value: 'DevOps珍藏' }
+          ],
+          description: '从零到一的Docker实战指南，掌握容器化部署技能。',
+          totalSupply: 600,
+          holders: 300,
+          tradeCount: 0,
+          createdAt: '2024-05-15T10:00:00Z',
+          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/BoxVertexColors/glTF-Binary/BoxVertexColors.glb',
+          backgroundColor: 'transparent'
+        }
+      ]
+
+      const found = collectionsData.find(item => item.id === id)
+      if (found) {
+        this.collection = { ...this.collection, ...found }
+      }
     },
-    
+
     onSwiperReady(swiper) {
       this.swiperInstance = swiper
       console.log('Swiper实例已初始化:', swiper)
     },
-    
+
     onSlideChange() {
       console.log('幻灯片切换')
     },
-    
+
+    handleGestureChange(isGesture) {
+      console.log('手势状态变化:', isGesture)
+    },
+
     toggleFavorite() {
       this.isFavorite = !this.isFavorite
       this.$toast({
@@ -306,14 +441,14 @@ export default {
         position: 'top'
       })
     },
-    
+
     formatPrice(price) {
       return price.toLocaleString('zh-CN', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       })
     },
-    
+
     formatDate(dateString) {
       const date = new Date(dateString)
       return date.toLocaleDateString('zh-CN', {
@@ -322,16 +457,16 @@ export default {
         day: 'numeric'
       })
     },
-    
+
     handleBuy() {
       this.showBuyDialog = true
     },
-    
+
     handleOffer() {
       this.offerPrice = this.collection.price.toFixed(2)
       this.showOfferDialog = true
     },
-    
+
     confirmBuy() {
       this.buyLoading = true
       // 模拟API调用
@@ -341,39 +476,39 @@ export default {
         this.showBuyDialog = false
       }, 1500)
     },
-    
+
     confirmOffer() {
       const price = parseFloat(this.offerPrice)
       if (isNaN(price) || price <= 0) {
         this.$toast.fail('请输入有效的出价金额')
         return
       }
-      
+
       // 模拟API调用
       this.$toast.loading({
         message: '提交出价中...',
         forbidClick: true,
         duration: 1000
       })
-      
+
       setTimeout(() => {
         this.$toast.success('出价提交成功！')
         this.showOfferDialog = false
         this.offerPrice = ''
       }, 1500)
     },
-    
+
     onBlessingFocus() {
       console.log('祝福语输入框获得焦点')
       // 在实际应用中，这里可以触发键盘弹出等操作
     },
-    
+
     onBlessingBlur() {
       console.log('祝福语输入框失去焦点')
       // 保存祝福语到服务器
       this.saveBlessingText()
     },
-    
+
     saveBlessingText() {
       // 模拟保存祝福语到服务器
       this.$toast.loading({
@@ -381,18 +516,18 @@ export default {
         forbidClick: true,
         duration: 800
       })
-      
+
       setTimeout(() => {
         this.$toast.success('祝福语已保存！')
       }, 1000)
     },
-    
+
     handleShare() {
       // 显示分享弹窗
       console.log('分享按钮被点击')
       this.showShareDialog = true
     },
-    
+
     copyShareLink() {
       const shareLink = `${window.location.origin}/collection/${this.collection.id}`
       // 在实际应用中，这里应该使用clipboard API复制链接
@@ -448,11 +583,11 @@ export default {
   position: relative;
   background: #000;
   height: 450px; // 增加高度以更好地显示导航箭头和分页
-  
+
   .collection-swiper {
     width: 100%;
     height: 100%;
-    
+
     .swiper-slide-content {
       width: 100%;
       height: 100%;
@@ -460,97 +595,126 @@ export default {
       align-items: center;
       justify-content: center;
     }
-    
+
     .swiper-image {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-    
+
     // Swiper样式覆盖 - 适配vue-awesome-swiper
-    :deep(.swiper-pagination-bullet) {
-      width: 10px;
-      height: 10px;
-      background: rgba(255, 255, 255, 0.7);
-      opacity: 1;
-      margin: 0 4px;
-      transition: all 0.3s ease;
-      
-      &:hover {
-        background: rgba(255, 255, 255, 0.9);
-        transform: scale(1.2);
-      }
-      
-      &.swiper-pagination-bullet-active {
-        background: #1989fa;
-        width: 24px;
-        border-radius: 6px;
-        transform: scale(1.1);
-      }
-    }
-    
-    :deep(.swiper-button-prev),
-    :deep(.swiper-button-next) {
-      color: #fff;
-      width: 44px;
-      height: 44px;
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      transition: all 0.3s ease;
-      
-      &::after {
-        font-size: 20px;
-        font-weight: bold;
-      }
-      
-      &:hover {
-        background: rgba(0, 0, 0, 0.6);
-        border-color: rgba(255, 255, 255, 0.5);
-        transform: scale(1.1);
-      }
-      
-      &.swiper-button-disabled {
-        opacity: 0.3;
-        cursor: not-allowed;
-      }
-    }
-    
-    :deep(.swiper-button-prev) {
-      left: 20px;
-    }
-    
-    :deep(.swiper-button-next) {
-      right: 20px;
-    }
-    
-    // 添加分页器容器样式
-    :deep(.swiper-pagination) {
-      bottom: 20px;
-    }
-  }
-  
-  .favorite-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 44px;
-    height: 44px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    transition: all 0.3s ease;
-    
-    &:hover {
-      background: rgba(255, 255, 255, 1);
-      transform: scale(1.1);
-    }
   }
 }
+
+.model-section {
+  padding: 16px;
+  background: #fff;
+  margin-top: 8px;
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 8px 0;
+  }
+
+  .section-hint {
+    font-size: 12px;
+    color: #999;
+    margin: 0 0 12px 0;
+  }
+
+  .model-container {
+    width: 100%;
+    height: 300px;
+    // background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+}
+
+:deep(.swiper-pagination-bullet) {
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.7);
+  opacity: 1;
+  margin: 0 4px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: scale(1.2);
+  }
+
+  &.swiper-pagination-bullet-active {
+    background: #1989fa;
+    width: 24px;
+    border-radius: 6px;
+    transform: scale(1.1);
+  }
+}
+
+:deep(.swiper-button-prev),
+:deep(.swiper-button-next) {
+  color: #fff;
+  width: 44px;
+  height: 44px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+
+  &::after {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.6);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+  }
+
+  &.swiper-button-disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+:deep(.swiper-button-prev) {
+  left: 20px;
+}
+
+:deep(.swiper-button-next) {
+  right: 20px;
+}
+
+// 添加分页器容器样式
+:deep(.swiper-pagination) {
+  bottom: 20px;
+}
+
+.favorite-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+  }
+}
+
 
 .info-section {
   padding: 20px;
@@ -558,7 +722,7 @@ export default {
 
 .collection-header {
   margin-bottom: 20px;
-  
+
   .collection-name {
     font-size: 24px;
     font-weight: 600;
@@ -566,7 +730,7 @@ export default {
     margin-bottom: 10px;
     line-height: 1.4;
   }
-  
+
   .collection-tags {
     display: flex;
     flex-wrap: wrap;
@@ -580,42 +744,42 @@ export default {
   padding: 20px;
   margin-bottom: 20px;
   color: #fff;
-  
+
   .current-price {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
-    
+
     .price-label {
       font-size: 14px;
       opacity: 0.9;
     }
-    
+
     .price-value {
       font-size: 32px;
       font-weight: 700;
     }
   }
-  
+
   .price-change {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
+
     .change-label {
       font-size: 14px;
       opacity: 0.9;
     }
-    
+
     .change-value {
       font-size: 18px;
       font-weight: 600;
-      
+
       &.up {
         color: #00b894;
       }
-      
+
       &.down {
         color: #ff7675;
       }
@@ -625,7 +789,7 @@ export default {
 
 .attributes-section {
   margin-bottom: 20px;
-  
+
   .section-title {
     font-size: 18px;
     font-weight: 600;
@@ -634,12 +798,12 @@ export default {
     padding-bottom: 8px;
     border-bottom: 2px solid #f0f0f0;
   }
-  
+
   .attributes-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    
+
     .attribute-item {
       display: flex;
       justify-content: space-between;
@@ -647,12 +811,12 @@ export default {
       padding: 12px;
       background: #f8f9fa;
       border-radius: 8px;
-      
+
       .attr-name {
         font-size: 14px;
         color: #666;
       }
-      
+
       .attr-value {
         font-size: 14px;
         font-weight: 500;
@@ -664,7 +828,7 @@ export default {
 
 .description-section {
   margin-bottom: 20px;
-  
+
   .section-title {
     font-size: 18px;
     font-weight: 600;
@@ -673,7 +837,7 @@ export default {
     padding-bottom: 8px;
     border-bottom: 2px solid #f0f0f0;
   }
-  
+
   .description-content {
     p {
       font-size: 15px;
@@ -686,7 +850,7 @@ export default {
 
 .trade-section {
   margin-bottom: 20px;
-  
+
   .section-title {
     font-size: 18px;
     font-weight: 600;
@@ -695,12 +859,12 @@ export default {
     padding-bottom: 8px;
     border-bottom: 2px solid #f0f0f0;
   }
-  
+
   .trade-info {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    
+
     .trade-item {
       display: flex;
       justify-content: space-between;
@@ -708,12 +872,12 @@ export default {
       padding: 12px;
       background: #f8f9fa;
       border-radius: 8px;
-      
+
       .trade-label {
         font-size: 14px;
         color: #666;
       }
-      
+
       .trade-value {
         font-size: 14px;
         font-weight: 500;
@@ -725,7 +889,7 @@ export default {
 
 .blessing-section {
   margin-bottom: 20px;
-  
+
   .section-title {
     font-size: 18px;
     font-weight: 600;
@@ -734,7 +898,7 @@ export default {
     padding-bottom: 8px;
     border-bottom: 2px solid #f0f0f0;
   }
-  
+
   .blessing-content {
     .blessing-input {
       :deep(.van-field__control) {
@@ -746,14 +910,14 @@ export default {
         background: #f8f9fa;
         border-radius: 8px;
         border: 1px solid #e8e8e8;
-        
+
         &:focus {
           border-color: #1989fa;
           background: #fff;
         }
       }
     }
-    
+
     .blessing-tip {
       font-size: 13px;
       color: #999;
@@ -769,12 +933,12 @@ export default {
   background: linear-gradient(135deg, #fff9e6 0%, #fff0cc 100%);
   border-radius: 12px;
   border: 1px solid #ffd166;
-  
+
   .surprise-content {
     display: flex;
     align-items: center;
     gap: 10px;
-    
+
     .surprise-text {
       font-size: 15px;
       font-weight: 500;
@@ -788,19 +952,19 @@ export default {
   display: flex;
   gap: 12px;
   margin-top: 20px;
-  
+
   .van-button {
     flex: 1;
     height: 48px;
     font-size: 16px;
     font-weight: 500;
     border-radius: 24px;
-    
+
     &.share-btn {
       background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
       border: none;
       color: #fff;
-      
+
       .van-icon {
         margin-right: 8px;
       }
@@ -810,19 +974,19 @@ export default {
 
 .dialog-content {
   padding: 20px;
-  
+
   p {
     margin: 10px 0;
     font-size: 16px;
     color: #333;
   }
-  
+
   .dialog-price {
     font-size: 20px;
     font-weight: 600;
     color: #1989fa;
   }
-  
+
   .dialog-tip {
     font-size: 14px;
     color: #999;
@@ -837,13 +1001,13 @@ export default {
       height: 300px;
     }
   }
-  
+
   .collection-header {
     .collection-name {
       font-size: 20px;
     }
   }
-  
+
   .price-section {
     .current-price {
       .price-value {
@@ -851,15 +1015,15 @@ export default {
       }
     }
   }
-  
+
   .attributes-grid,
   .trade-info {
     grid-template-columns: 1fr !important;
   }
-  
+
   .action-buttons {
     flex-direction: column;
-    
+
     .van-button {
       width: 100%;
     }
