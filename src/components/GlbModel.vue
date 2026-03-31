@@ -166,12 +166,11 @@ export default {
       () => props.modelUrl,
       (newVal, oldVal) => {
         console.log('modelUrl', oldVal, newVal)
-        if (newVal) {
+        if (newVal && model) {
           modelUrl.value = newVal
-          initThree()
+          loadModel()
         }
-      },
-      { immediate: true }
+      }
     )
 
     /**
