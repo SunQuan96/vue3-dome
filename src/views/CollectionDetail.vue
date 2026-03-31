@@ -264,7 +264,7 @@ export default {
           holders: 350,
           tradeCount: 0,
           createdAt: '2023-12-01T10:00:00Z',
-          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
+          modelUrl: '/DamagedHelmet.glb',
           backgroundColor: 'transparent'
         },
         {
@@ -294,7 +294,7 @@ export default {
           holders: 500,
           tradeCount: 0,
           createdAt: '2024-01-15T10:00:00Z',
-          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/Duck/glTF-Binary/Duck.glb',
+          modelUrl: '/Duck.glb',
           backgroundColor: 'transparent'
         },
         {
@@ -323,7 +323,7 @@ export default {
           holders: 250,
           tradeCount: 0,
           createdAt: '2024-02-20T10:00:00Z',
-          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/Box/glTF-Binary/Box.glb',
+          modelUrl: '/Box.glb',
           backgroundColor: 'transparent'
         },
         {
@@ -352,7 +352,7 @@ export default {
           holders: 400,
           tradeCount: 0,
           createdAt: '2024-03-10T10:00:00Z',
-          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb',
+          modelUrl: '/BoxAnimated.glb',
           backgroundColor: 'transparent'
         },
         {
@@ -381,7 +381,7 @@ export default {
           holders: 600,
           tradeCount: 0,
           createdAt: '2024-04-05T10:00:00Z',
-          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/BoxInterleaved/glTF-Binary/BoxInterleaved.glb',
+          modelUrl: '/BoxInterleaved.glb',
           backgroundColor: 'transparent'
         },
         {
@@ -410,7 +410,7 @@ export default {
           holders: 300,
           tradeCount: 0,
           createdAt: '2024-05-15T10:00:00Z',
-          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/BoxVertexColors/glTF-Binary/BoxVertexColors.glb',
+          modelUrl: '/BoxVertexColors.glb',
           backgroundColor: 'transparent'
         }
       ]

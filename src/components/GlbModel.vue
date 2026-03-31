@@ -215,7 +215,10 @@ export default {
       scene.add(directionalLight)
 
       // 加载模型
-      loadModel()
+      if (props.modelUrl) {
+        modelUrl.value = props.modelUrl
+        loadModel()
+      }
 
       // 开始动画循环
       animate()

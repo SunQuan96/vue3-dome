@@ -97,7 +97,7 @@ export default {
           likes: 89,
           isNew: true,
           createdAt: '2026-02-28',
-          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
+          modelUrl: '/DamagedHelmet.glb',
           backgroundColor: 'transparent'
         },
         {
@@ -110,7 +110,7 @@ export default {
           likes: 76,
           isNew: false,
           createdAt: '2026-02-25',
-          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/Duck/glTF-Binary/Duck.glb',
+          modelUrl: '/Duck.glb',
           backgroundColor: 'transparent'
         },
         {
@@ -123,7 +123,7 @@ export default {
           likes: 102,
           isNew: true,
           createdAt: '2026-03-01',
-          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/Box/glTF-Binary/Box.glb',
+          modelUrl: '/Box.glb',
           backgroundColor: 'transparent'
         },
         {
@@ -136,7 +136,7 @@ export default {
           likes: 65,
           isNew: false,
           createdAt: '2026-02-20',
-          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb',
+          modelUrl: '/BoxAnimated.glb',
           backgroundColor: 'transparent'
         },
         {
@@ -149,7 +149,7 @@ export default {
           likes: 94,
           isNew: false,
           createdAt: '2026-02-22',
-          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/BoxInterleaved/glTF-Binary/BoxInterleaved.glb',
+          modelUrl: '/BoxInterleaved.glb',
           backgroundColor: 'transparent'
         },
         {
@@ -162,7 +162,7 @@ export default {
           likes: 88,
           isNew: true,
           createdAt: '2026-02-27',
-          modelUrl: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@main/2.0/BoxVertexColors/glTF-Binary/BoxVertexColors.glb',
+          modelUrl: '/BoxVertexColors.glb',
           backgroundColor: 'transparent'
         }
       ]
