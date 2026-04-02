@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --cors true --host 127.0.0.1 --port 5173 --open true",
-    "serve": "vite --cors true --host 127.0.0.1 --port 5173 --open true",
+    "dev": "vite --cors true --host 0.0.0.0 --port 3000 --open true",
+    "serve": "vite --cors true --host 0.0.0.0 --port 3000 --open true",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix",
@@ -13,6 +13,7 @@
     "deploy": "npm run build && gh-pages -d dist -t true"
   },
   "dependencies": {
+    "@chenglou/pretext": "^0.0.4",
     "@vant/touch-emulator": "^1.4.0",
     "axios": "^1.6.2",
     "cropperjs": "^1.6.2",

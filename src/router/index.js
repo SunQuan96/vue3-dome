@@ -1,3 +1,4 @@
+import PretextDemos from '@/views/PretextDemos.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
@@ -79,6 +80,15 @@ const routes = [
     component: () => import('@/views/Login.vue'),
     meta: {
       title: '登录'
+    }
+  },
+  {
+    path: '/pretext-demos',
+    name: 'PretextDemos',
+    component: PretextDemos,
+    meta: {
+      title: '文本布局演示',
+      requiresAuth: false
     }
   }
 ]

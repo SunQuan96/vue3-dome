@@ -16,23 +16,17 @@
         <van-button type="primary" block @click="goToScreen"> 公屏端（电视展示） </van-button>
         <van-button type="info" block @click="goToParticipant"> 参与端（手机扫码） </van-button>
         <van-button type="danger" block @click="goToGeekProfile"> 极客名片 </van-button>
-        <van-button 
-          type="warning" 
-          block 
-          @click="goToLuckRank"
-          class="luck-rank-btn"
-        >
+        <van-button type="warning" block @click="goToLuckRank" class="luck-rank-btn">
           <van-icon name="medal" class="btn-icon" />
           手气榜
         </van-button>
-        <van-button 
-          type="primary" 
-          block 
-          @click="goToCollections"
-          class="collections-btn"
-        >
+        <van-button type="primary" block @click="goToCollections" class="collections-btn">
           <van-icon name="gem" class="btn-icon" />
           我的藏品
+        </van-button>
+        <van-button type="success" block @click="goToPretextDemos" class="pretext-demos-btn">
+          <van-icon name="font" class="btn-icon" />
+          文本布局演示
         </van-button>
       </div>
 
@@ -41,16 +35,16 @@
         <p>Token: {{ token || '无' }}</p>
       </div>
     </div>
-    
+
     <!-- 底部导航 -->
     <BottomNavigation current-tab="home" @tab-change="onTabChange" />
   </div>
 </template>
 
 <script>
+import BottomNavigation from '@/components/BottomNavigation.vue'
 import { useUserStore } from '@/store'
 import { showToast } from 'vant'
-import BottomNavigation from '@/components/BottomNavigation.vue'
 
 export default {
   name: 'Home',
@@ -92,7 +86,10 @@ export default {
     goToCollections() {
       this.$router.push('/collections')
     },
-    
+    goToPretextDemos() {
+      this.$router.push('/pretext-demos')
+    },
+
     onTabChange(tabName) {
       // 当标签页变化时，可以在这里处理一些逻辑
       console.log('标签页切换到:', tabName)
@@ -118,40 +115,57 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  
+
   .luck-rank-btn {
-     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-     border: none;
-     color: #fff;
-     font-weight: 600;
-     box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
-     
-     .btn-icon {
-       margin-right: 8px;
-     }
-     
-     &:active {
-       opacity: 0.9;
-       transform: translateY(1px);
-     }
-   }
-   
-   .collections-btn {
-     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-     border: none;
-     color: #fff;
-     font-weight: 600;
-     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-     
-     .btn-icon {
-       margin-right: 8px;
-     }
-     
-     &:active {
-       opacity: 0.9;
-       transform: translateY(1px);
-     }
-   }
+    background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
+
+    .btn-icon {
+      margin-right: 8px;
+    }
+
+    &:active {
+      opacity: 0.9;
+      transform: translateY(1px);
+    }
+  }
+
+  .collections-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+
+    .btn-icon {
+      margin-right: 8px;
+    }
+
+    &:active {
+      opacity: 0.9;
+      transform: translateY(1px);
+    }
+  }
+
+  .pretext-demos-btn {
+    background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+
+    .btn-icon {
+      margin-right: 8px;
+    }
+
+    &:active {
+      opacity: 0.9;
+      transform: translateY(1px);
+    }
+  }
 }
 
 .info {
